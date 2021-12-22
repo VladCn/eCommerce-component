@@ -1,8 +1,13 @@
-import { createMenuList } from "./template.js"
+import {createCartList, createMenuList, createTotal} from "./template.js"
+import { menuItems } from "./app.js"
+
 createMenuList()
 const buttonsInCart = document.querySelectorAll(".in-cart")
 const buttonsAdd = document.querySelectorAll(".add")
 const menuJS = document.querySelector(".menu-listUL")
+const cartList = document.querySelector(".cart-summary")
+const content = document.querySelector(".content")
+const subTotalMenu = document.querySelector(".subtotal")
 console.log(menuJS)
 // buttonsInCart[0].addEventListener("click", btnCartAction)
 
@@ -16,6 +21,29 @@ function btnCartAction(e){
     if(e.target.tagName !== "button".toUpperCase()){
         return
     }
+    const selectedID = e.target.dataset.id
     console.log(e.target, e.currentTarget)
+    console.log(e.target.dataset.id)
+    menuItems.forEach((item) => {
+        if(item.id === Number(selectedID)){
+            cartJs.push({...item, count: item.count + 1})
+            console.log("12234")
+        }
+    })
+
+    createCartList(cartJs)
+    createTotal(cartJs)
+
+
+//     const markup2 = menuItems
+//         .map(({name, image, price, alt, count, id}) =>`
+//             <button class="in-cart">
+//     <img src="images/check.svg" alt="Check">
+//         In Cart
+// </button>`)
+//     content.insertAdjacentHTML("beforeend", markup2);
+
+
 
 }
+
