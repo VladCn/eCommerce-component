@@ -5,7 +5,8 @@ export const menuItems = [
         price: 2.23,
         image: 'plate__french-fries.png',
         alt: 'French Fries',
-        count: 0
+        count: 0,
+        sumPrice: 0,
     },
     {
         id: 2,
@@ -13,7 +14,8 @@ export const menuItems = [
         price: 5.12,
         image: 'plate__salmon-vegetables.png',
         alt: 'Salmon and Vegetables',
-        count: 0
+        count: 0,
+        sumPrice: 0,
     },
     {
         id: 3,
@@ -21,7 +23,8 @@ export const menuItems = [
         price: 7.82,
         image: 'plate__spaghetti-meat-sauce.png',
         alt: 'Spaghetti with Meat Sauce',
-        count: 0
+        count: 0,
+        sumPrice: 0,
     },
     {
         id: 4,
@@ -29,7 +32,8 @@ export const menuItems = [
         price: 5.99,
         image: 'plate__bacon-eggs.png',
         alt: 'Bacon, Eggs, and Toast',
-        count: 0
+        count: 0,
+        sumPrice: 0,
     },
     {
         id: 5,
@@ -37,7 +41,8 @@ export const menuItems = [
         price: 6.98,
         image: 'plate__chicken-salad.png',
         alt: 'Chicken Salad with Parmesan',
-        count: 0
+        count: 0,
+        sumPrice: 0,
     },
     {
         id: 6,
@@ -45,6 +50,7 @@ export const menuItems = [
         price: 6.34,
         image: 'plate__fish-sticks-fries.png',
         alt: 'Fish Sticks and Fries',
-        count: 0
+        count: 0,
+        sumPrice: 0,
     }
 ]

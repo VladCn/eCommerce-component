@@ -1,5 +1,7 @@
 import { menuItems } from "./app.js"
 
+
+
 export const createMenuList = function (){
     const menuJS = document.querySelector(".menu-listUL")
     const markup = menuItems
@@ -26,7 +28,15 @@ export const createMenuList = function (){
 export const createCartList =  function (list){
 
     const cartList = document.querySelector(".cart-summary");
-const markup = list.map(({name, image, price, alt, count, id}) =>
+
+    if(cartList){
+        console.log("TRUE")
+    }
+    if(list){
+        console.log("list")
+    }
+const markup = list.map(({name, image, price, alt, count, id, sumPrice}) =>
+
     `
     <li>
           <div class="plate">
@@ -38,21 +48,64 @@ const markup = list.map(({name, image, price, alt, count, id}) =>
             <p class="price">${price}</p>
           </div>
           <div class="quantity__wrapper">
-            <button class="decrease">
-              <img src="images/chevron.svg" />
+            <button class="decrease" data-id=${id}>
+              <img data-id=${id} src="images/chevron.svg" />
             </button>
             <div class="quantity">${count}</div>
-            <button class="increase">
-              <img src="images/chevron.svg" />
+            <button class="increase" data-id=${id}>
+              <img data-id=${id} src="images/chevron.svg" />
             </button>
           </div>
           <div class="subtotal">
-            ${price}
+            ${sumPrice}
           </div>
         </li>`)
         .join("");
+
     console.log(list)
-    cartList.insertAdjacentHTML("afterbegin", markup);
+    cartList.innerHTML = markup;
+    const decrease = document.querySelectorAll(".decrease")
+    const increase = document.querySelectorAll(".increase")
+    const quantity = document.querySelectorAll(".quantity")
+
+    decrease.forEach(button => button.addEventListener("click", (e) => decreaseJS(e, list, quantity)))
+    increase.forEach(button => button.addEventListener("click", (e) => increaseJS(e, list, quantity)))
+
+
+
+}
+
+function increaseJS(e, list, quantity) {
+    // const quantity = document.querySelector(".quantity")
+    console.log("iiiiiiiiiii")
+    console.log(e.target.dataset.id)
+    const idTarget = e.target.dataset.id;
+    console.log(list)
+    const countInc = list.map((item) => {
+        if(+item.id === +idTarget) {
+            console.log(item.price)
+            return {...item, id: item.id, count: item.count += 1, price: item.price, sumPrice: item.sumPrice += item.price}
+        }
+    })
+    createCartList(list)
+    console.log(countInc)
+
+    // quantity.innerHTML = countInc[idTarget].count;
+}
+function decreaseJS(e, list, quantity) {
+    console.log("ddddddddd")
+    // const quantity = document.querySelector(".quantity")
+    console.log("iiiiiiiiiii")
+    console.log(e.target.dataset.id)
+    const idTarget = e.target.dataset.id;
+    console.log(list)
+    const countInc = list.map((item) => {
+        if(+item.id === +idTarget) {
+            return {...item, id: item.id, count: item.count -= 1, sumPrice: item.price -= item.price}
+        }
+    })
+    createCartList(list)
+    console.log(countInc)
 }
 
 
@@ -101,4 +154,11 @@ export const createTotal = (cart) => {
     console.log(result)
 }
 
-// taxMenu.textContent = `${subtotal}`
+// export function increaseJS() {
+//     const quantity = document.querySelector(".quantity")
+//     console.log("iiiiiiiiiii")
+//     console.log(quantity.textContent += 1)
+// }
+// export function decreaseJS() {
+//     console.log("ddddddddd")
+// }

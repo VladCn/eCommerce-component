@@ -1,4 +1,4 @@
-import {createCartList, createMenuList, createTotal} from "./template.js"
+import {createCartList, createMenuList, createTotal,} from "./template.js"
 import { menuItems } from "./app.js"
 
 createMenuList()
@@ -8,6 +8,8 @@ const menuJS = document.querySelector(".menu-listUL")
 const cartList = document.querySelector(".cart-summary")
 const content = document.querySelector(".content")
 const subTotalMenu = document.querySelector(".subtotal")
+
+// const increase = document.querySelector(".increase")
 console.log(menuJS)
 // buttonsInCart[0].addEventListener("click", btnCartAction)
 
@@ -35,15 +37,9 @@ function btnCartAction(e){
     createTotal(cartJs)
 
 
-//     const markup2 = menuItems
-//         .map(({name, image, price, alt, count, id}) =>`
-//             <button class="in-cart">
-//     <img src="images/check.svg" alt="Check">
-//         In Cart
-// </button>`)
-//     content.insertAdjacentHTML("beforeend", markup2);
-
-
-
 }
 
+
+
+
+// increase.addEventListener("click", increaseJS)
