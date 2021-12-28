@@ -3,18 +3,10 @@ import { menuItems } from "./app.js"
 let cartJs = []
 
 createMenuList()
-const buttonsInCart = document.querySelectorAll(".in-cart")
-const buttonsAdd = document.querySelectorAll(".add")
 const menuJS = document.querySelector(".menu-listUL")
-const cartList = document.querySelector(".cart-summary")
-const content = document.querySelector(".content")
-const subTotalMenu = document.querySelector(".subtotal")
 const setButtonInCart = (dataId) => (`<button class="in-cart" data-id=${dataId} ><img src="images/check.svg" alt="Check">In Cart</button>`)
 const setButtonAdd = (dataId) => (`<button class="add " data-id=${dataId}>Add to Cart</button>`)
-// const increase = document.querySelector(".increase")
-
-// buttonsInCart[0].addEventListener("click", btnCartAction)
-
+const setFixedPrice = (price) => Number((price).toFixed(2));
 
 
 
@@ -26,8 +18,6 @@ function btnCartAction(e){
         return
     }
     const selectedID = Number(e.target.dataset.id)
-    console.log(e.target, e.currentTarget)
-    console.log(e.target.dataset.id)
     const isIncludes = cartJs.some(item => item.id === selectedID)
     if(isIncludes){
         return;
@@ -47,16 +37,9 @@ function btnCartAction(e){
 
 }
 
-export const createCartList =  function (){
-
+export const createCartList = function (){
     const cartList = document.querySelector(".cart-summary");
 
-    if(cartList){
-        console.log("TRUE")
-    }
-    if(cartJs){
-        console.log(cartJs, "cartJs")
-    }
     const markup = cartJs.map(({name, image, price, alt, count, id, sumPrice}) =>
 
         `
@@ -119,22 +102,29 @@ function increaseJS(e) {
 
     const countInc = cartJs.map((item) => {
         if(+item.id === +idTarget) {
-            return {...item, id: item.id, count: item.count + 1, price: item.price, sumPrice: item.sumPrice + item.price}
+            return {
+                ...item,
+                id: item.id,
+                count: item.count + 1,
+                price: item.price,
+                sumPrice: setFixedPrice(item.sumPrice + item.price)}
         }
         return item
     })
     cartJs = countInc
     createCartList(cartJs)
+    createTotal(cartJs)
 
 }
 function decreaseJS(e) {
     const inCartButtons = document.querySelectorAll(".in-cart")
     const idTarget = Number(e.target.dataset.id);
     const result = [];
+
     cartJs.forEach(item => {
         if(item.id === idTarget ){
             if(item.count > 1){
-                result.push({...item, count: item.count - 1, sumPrice: item.sumPrice - item.price})
+                result.push({...item, count: item.count - 1, sumPrice: setFixedPrice(item.sumPrice - item.price)})
             }
         }
         result.push(item)
@@ -143,7 +133,7 @@ function decreaseJS(e) {
     const countInc = cartJs.map((item) => {
         if(item.id === idTarget ){
             if(item.count > 1){
-                return {...item, id: item.id, count: item.count - 1, sumPrice: item.sumPrice - item.price}
+                return {...item, id: item.id, count: item.count - 1, sumPrice: setFixedPrice(item.sumPrice - item.price)}
             }
             Array.from(inCartButtons).map(item => {
                 if (Number(item.dataset.id) === idTarget) {
@@ -158,6 +148,7 @@ function decreaseJS(e) {
     })
     cartJs = countInc.filter(item => item)
     createCartList(cartJs)
+    createTotal(cartJs)
 
 }
 
@@ -168,14 +159,14 @@ function createTotal(cart) {
         const subTaxS = summ * 0.2;
         const subTotalS = summ + subTaxS;
 
-        const subTax = Number(subTaxS.toFixed(2))
-        const subTotal = Number(subTotalS.toFixed(2))
+        const subTax = setFixedPrice(subTaxS)
+        const subTotal = setFixedPrice(subTotalS)
 
         return {
             ...acc,
-            subtotal: acc.subtotal + summ,
-            tax: acc.tax + subTax,
-            total: acc.total + subTotal,
+            subtotal: setFixedPrice(acc.subtotal + summ),
+            tax: setFixedPrice(acc.tax + subTax),
+            total: setFixedPrice(acc.total + subTotal),
         }
     },{subtotal:0, tax:0, total:0,})
 
@@ -187,20 +178,4 @@ function createTotal(cart) {
     taxMenu.textContent = `$${result.tax}`
     subtotalMenu.textContent = `$${result.subtotal}`
     totalMenu.textContent = `$${result.total}`
-    console.log(taxMenu.textContent)
-
-    // `<div class="line-item">
-    //       <div class="label">Subtotal:</div>
-    //       <div class="amount price subtotal">$10.80</div>
-    //     </div>
-    //     <div class="line-item">
-    //       <div class="label">Tax:</div>
-    //       <div class="amount price tax">$1.05</div>
-    //     </div>
-    //     <div class="line-item total">
-    //       <div class="label">Total:</div>
-    //       <div class="amount price total">$11.85</div>
-    //     </div>`
-
-    console.log(result)
 }
