@@ -1,4 +1,5 @@
 import { menuItems } from "./app.js"
+import { cartJs as list } from "./js"
 
 
 
@@ -25,57 +26,9 @@ export const createMenuList = function (){
 }
 
 
-export const createCartList =  function (list){
-
-    const cartList = document.querySelector(".cart-summary");
-
-    if(cartList){
-        console.log("TRUE")
-    }
-    if(list){
-        console.log("list")
-    }
-const markup = list.map(({name, image, price, alt, count, id, sumPrice}) =>
-
-    `
-    <li>
-          <div class="plate">
-            <img src="images/${image}" alt="${alt}" class="plate" />
-            <div class="quantity">${count}</div>
-          </div>
-          <div class="content">
-            <p class="menu-item">${name}</p>
-            <p class="price">${price}</p>
-          </div>
-          <div class="quantity__wrapper">
-            <button class="decrease" data-id=${id}>
-              <img data-id=${id} src="images/chevron.svg" />
-            </button>
-            <div class="quantity">${count}</div>
-            <button class="increase" data-id=${id}>
-              <img data-id=${id} src="images/chevron.svg" />
-            </button>
-          </div>
-          <div class="subtotal">
-            ${sumPrice}
-          </div>
-        </li>`)
-        .join("");
-
-    console.log(list)
-    cartList.innerHTML = markup;
-    const decrease = document.querySelectorAll(".decrease")
-    const increase = document.querySelectorAll(".increase")
-    const quantity = document.querySelectorAll(".quantity")
-
-    decrease.forEach(button => button.addEventListener("click", (e) => decreaseJS(e, list, quantity)))
-    increase.forEach(button => button.addEventListener("click", (e) => increaseJS(e, list, quantity)))
 
 
-
-}
-
-function increaseJS(e, list, quantity) {
+export function increaseJS(e, list) {
     // const quantity = document.querySelector(".quantity")
     console.log("iiiiiiiiiii")
     console.log(e.target.dataset.id)
@@ -87,25 +40,29 @@ function increaseJS(e, list, quantity) {
             return {...item, id: item.id, count: item.count += 1, price: item.price, sumPrice: item.sumPrice += item.price}
         }
     })
+    list = countInc
     createCartList(list)
-    console.log(countInc)
+    console.log(list, 'list')
 
     // quantity.innerHTML = countInc[idTarget].count;
 }
-function decreaseJS(e, list, quantity) {
+export function decreaseJS(e, list, quantity, cartList) {
     console.log("ddddddddd")
-    // const quantity = document.querySelector(".quantity")
+
     console.log("iiiiiiiiiii")
     console.log(e.target.dataset.id)
     const idTarget = e.target.dataset.id;
     console.log(list)
-    const countInc = list.map((item) => {
-        if(+item.id === +idTarget) {
-            return {...item, id: item.id, count: item.count -= 1, sumPrice: item.price -= item.price}
+    const countInc = list.filter((item) => {
+        if(+item.id === +idTarget ){
+            if(item.count > 1){
+                return {...item, id: item.id, count: item.count -= 1, sumPrice: item.sumPrice -= item.price}
+            }
+            return false
         }
     })
+    list = countInc
     createCartList(list)
-    console.log(countInc)
 }
 
 
