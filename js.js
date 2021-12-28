@@ -9,7 +9,8 @@ const menuJS = document.querySelector(".menu-listUL")
 const cartList = document.querySelector(".cart-summary")
 const content = document.querySelector(".content")
 const subTotalMenu = document.querySelector(".subtotal")
-const buttonInCart = "<button class=\"in-cart\" ><img src=\"images/check.svg\" alt=\"Check\">In Cart</button>"
+const setButtonInCart = (dataId) => (`<button class="in-cart" data-id=${dataId} ><img src="images/check.svg" alt="Check">In Cart</button>`)
+const setButtonAdd = (dataId) => (`<button class="add " data-id=${dataId}>Add to Cart</button>`)
 // const increase = document.querySelector(".increase")
 
 // buttonsInCart[0].addEventListener("click", btnCartAction)
@@ -39,7 +40,7 @@ function btnCartAction(e){
     })
     const parent = e.target.parentNode
     e.target.remove()
-    parent.insertAdjacentHTML("beforeend" ,buttonInCart)
+    parent.insertAdjacentHTML("beforeend" ,setButtonInCart(selectedID) )
     createCartList()
     createTotal(cartJs)
 
@@ -127,10 +128,11 @@ function increaseJS(e) {
 
 }
 function decreaseJS(e) {
-    const idTarget = e.target.dataset.id;
+    const inCartButtons = document.querySelectorAll(".in-cart")
+    const idTarget = Number(e.target.dataset.id);
     const result = [];
     cartJs.forEach(item => {
-        if(+item.id === +idTarget ){
+        if(item.id === idTarget ){
             if(item.count > 1){
                 result.push({...item, count: item.count - 1, sumPrice: item.sumPrice - item.price})
             }
@@ -139,10 +141,17 @@ function decreaseJS(e) {
     })
 
     const countInc = cartJs.map((item) => {
-        if(+item.id === +idTarget ){
+        if(item.id === idTarget ){
             if(item.count > 1){
                 return {...item, id: item.id, count: item.count - 1, sumPrice: item.sumPrice - item.price}
             }
+            Array.from(inCartButtons).map(item => {
+                if (Number(item.dataset.id) === idTarget) {
+                    const parent = item.parentNode;
+                    item.remove()
+                    parent.insertAdjacentHTML("beforeend", setButtonAdd(idTarget));
+                }
+            })
             return null
         }
         return item
